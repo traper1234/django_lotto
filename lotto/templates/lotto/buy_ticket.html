@@ -1,0 +1,10 @@
+<h2>로또 구매하기</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">구매하기</button>
+</form>
+
+<a href="/admin/">관리자 페이지로 돌아가기</a>
