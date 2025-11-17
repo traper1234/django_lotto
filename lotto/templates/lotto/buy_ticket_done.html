@@ -1,20 +1,46 @@
-<h1>구매 완료!</h1>
+{% extends "lotto/base.html" %}
 
-<p>구매한 번호: {{ ticket.numbers }}</p>
-<p>구매 방식: {{ ticket.is_auto|yesno:"자동,수동" }}</p>
+{% block title %}구매 완료 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>구매 완료!</h2>
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+    <p><strong>티켓 번호:</strong> #{{ ticket.id }}</p>
+    <p><strong>구매한 번호:</strong> {{ ticket.numbers }}</p>
+    <p><strong>구매 방식:</strong> {{ ticket.is_auto|yesno:"자동,수동" }}</p>
+    <p><strong>구매일시:</strong> {{ ticket.created_at|date:"Y-m-d H:i" }}</p>
+</div>
 
 {% if winning_numbers %}
-    <p>당첨 번호: {{ winning_numbers }}</p>
+    <div style="background: #fff3cd; padding: 20px; border-radius: 5px; margin: 20px 0; border: 2px solid #ffc107;">
+        <p><strong>당첨 번호:</strong> {{ winning_numbers }}</p>
+        {% if bonus_number %}
+            <p><strong>보너스 번호:</strong> {{ bonus_number }}</p>
+        {% endif %}
+    </div>
     
-    {% if is_winner %}
-        <p style="color: green; font-size: 24px; font-weight: bold;">🎉 당첨입니다! 🎉</p>
+    {% if winning_grade > 0 %}
+        <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin: 20px 0;">
+            <h2 class="grade-{{ winning_grade }}" style="color: white; font-size: 2.5em; margin: 10px 0;">
+                🎉 {{ ticket.get_winning_grade_display }} 당첨! 🎉
+            </h2>
+            <p style="font-size: 1.2em;">축하합니다!</p>
+        </div>
     {% else %}
-        <p style="color: red; font-size: 24px; font-weight: bold;">😢 낙첨입니다.</p>
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin: 20px 0;">
+            <p style="font-size: 1.5em; color: #666;">😢 낙첨입니다.</p>
+            <p>다음 기회에 도전해보세요!</p>
+        </div>
     {% endif %}
 {% else %}
-    <p>아직 당첨 번호가 설정되지 않았습니다. 관리자 페이지에서 당첨 번호를 설정해주세요.</p>
+    <div style="background: #d1ecf1; padding: 20px; border-radius: 5px; margin: 20px 0;">
+        <p>아직 당첨 번호가 설정되지 않았습니다. 관리자 페이지에서 당첨 번호를 설정해주세요.</p>
+    </div>
 {% endif %}
 
-<br>
-<a href="/lotto/buy/">다시 구매하기</a><br>
-<a href="/admin/">관리자 페이지로 돌아가기</a>
+<div style="margin-top: 30px;">
+    <a href="{% url 'buy_ticket' %}" class="btn">다시 구매하기</a>
+    <a href="{% url 'my_tickets' %}" class="btn" style="background: #28a745;">내 티켓 보기</a>
+</div>
+{% endblock %}

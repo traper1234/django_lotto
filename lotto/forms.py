@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 from .models import Ticket
 
 class LottoBuyForm(forms.ModelForm):
@@ -51,3 +53,31 @@ class LottoBuyForm(forms.ModelForm):
 
         cleaned_data['numbers'] = ",".join([str(n) for n in nums])
         return cleaned_data
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2')
+        labels = {
+            'username': '사용자명',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': '사용자명을 입력하세요'})
+        self.fields['password1'].widget.attrs.update({'placeholder': '비밀번호를 입력하세요'})
+        self.fields['password2'].widget.attrs.update({'placeholder': '비밀번호를 다시 입력하세요'})
+        self.fields['password1'].label = '비밀번호'
+        self.fields['password2'].label = '비밀번호 확인'
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label='사용자명',
+        widget=forms.TextInput(attrs={'placeholder': '사용자명을 입력하세요'})
+    )
+    password = forms.CharField(
+        label='비밀번호',
+        widget=forms.PasswordInput(attrs={'placeholder': '비밀번호를 입력하세요'})
+    )

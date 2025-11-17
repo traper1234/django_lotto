@@ -1,0 +1,42 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}추첨 진행 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>추첨 진행</h2>
+
+{% if active_draw %}
+    <div style="background: #fff3cd; padding: 20px; border-radius: 5px; margin: 20px 0; border: 2px solid #ffc107;">
+        <h3>현재 활성 추첨</h3>
+        <p><strong>당첨번호:</strong> {{ active_draw.numbers }}</p>
+        <p><strong>보너스 번호:</strong> {{ active_draw.bonus_number }}</p>
+        <p><strong>추첨일시:</strong> {{ active_draw.drawn_at|date:"Y-m-d H:i" }}</p>
+        <p style="margin-top: 15px; color: #856404;">
+            <strong>주의:</strong> 새 추첨을 진행하면 기존 활성 추첨이 비활성화되고, 모든 티켓의 당첨 등급이 재계산됩니다.
+        </p>
+    </div>
+{% else %}
+    <div style="background: #d1ecf1; padding: 20px; border-radius: 5px; margin: 20px 0;">
+        <p>아직 추첨이 진행되지 않았습니다. 새 추첨을 진행해주세요.</p>
+    </div>
+{% endif %}
+
+<div style="margin: 30px 0;">
+    <form method="post" onsubmit="return confirm('정말로 새 추첨을 진행하시겠습니까? 기존 활성 추첨이 비활성화됩니다.');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success" style="font-size: 1.2em; padding: 15px 30px;">
+            🎲 새 추첨 진행하기
+        </button>
+    </form>
+</div>
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 30px;">
+    <h3>추첨 안내</h3>
+    <ul style="line-height: 1.8;">
+        <li>추첨을 진행하면 1~45 중에서 6개의 번호와 1개의 보너스 번호가 랜덤으로 생성됩니다.</li>
+        <li>모든 티켓의 당첨 등급이 자동으로 계산되어 업데이트됩니다.</li>
+        <li>당첨 등급: 1등(6개 일치), 2등(5개+보너스), 3등(5개 일치), 4등(4개 일치), 5등(3개 일치)</li>
+    </ul>
+</div>
+{% endblock %}
+

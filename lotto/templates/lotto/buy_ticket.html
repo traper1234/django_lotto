@@ -1,10 +1,33 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}로또 구매 - 로또 사이트{% endblock %}
+
+{% block content %}
 <h2>로또 구매하기</h2>
 
-<form method="post">
+<form method="post" style="max-width: 500px; margin: 20px 0;">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.is_auto.label }}</label>
+        {{ form.is_auto }}
+        <small style="color: #666; display: block; margin-top: 5px;">체크하면 자동으로 번호가 생성됩니다.</small>
+    </div>
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.numbers.label }}</label>
+        {{ form.numbers }}
+        <small style="color: #666; display: block; margin-top: 5px;">예: 1,5,12,20,33,42 (자동 구매 시 무시됨)</small>
+        {% if form.numbers.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.numbers.errors }}</div>
+        {% endif %}
+    </div>
+    
+    {% if form.non_field_errors %}
+        <div style="color: red; margin: 15px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
 
-    <button type="submit">구매하기</button>
+    <button type="submit" class="btn">구매하기</button>
 </form>
-
-<a href="/admin/">관리자 페이지로 돌아가기</a>
+{% endblock %}

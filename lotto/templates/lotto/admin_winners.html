@@ -1,0 +1,106 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}당첨자 확인 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>당첨자 확인</h2>
+
+{% if active_draw %}
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 10px; margin: 20px 0;">
+        <h3 style="color: white; margin-bottom: 15px;">현재 활성 추첨</h3>
+        <p style="font-size: 1.3em;"><strong>당첨번호:</strong> {{ active_draw.numbers }}</p>
+        <p style="font-size: 1.3em;"><strong>보너스 번호:</strong> {{ active_draw.bonus_number }}</p>
+        <p><small>추첨일시: {{ active_draw.drawn_at|date:"Y-m-d H:i" }}</small></p>
+    </div>
+
+    <h3 style="margin-top: 40px;">등급별 당첨 통계</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+        {% for grade, data in winners_by_grade.items %}
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; border: 2px solid #ddd;">
+                <h4 class="grade-{{ grade }}">{{ grade }}등</h4>
+                <p style="font-size: 2em; font-weight: bold; margin: 10px 0;">
+                    {{ data.count }}
+                </p>
+                <p>명</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3 style="margin-top: 40px;">등급별 당첨자 목록</h3>
+    {% for grade, data in winners_by_grade.items %}
+        {% if data.count > 0 %}
+            <div style="margin: 30px 0;">
+                <h4 class="grade-{{ grade }}" style="font-size: 1.5em; margin-bottom: 15px;">
+                    {{ grade }}등 당첨자 ({{ data.count }}명)
+                </h4>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 12px; text-align: left;">티켓 번호</th>
+                            <th style="padding: 12px; text-align: left;">사용자</th>
+                            <th style="padding: 12px; text-align: left;">번호</th>
+                            <th style="padding: 12px; text-align: left;">구매일시</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in data.tickets %}
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px;">#{{ ticket.id }}</td>
+                            <td style="padding: 12px;">{{ ticket.user.username }}</td>
+                            <td style="padding: 12px;">{{ ticket.numbers }}</td>
+                            <td style="padding: 12px;">{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if data.count > 50 %}
+                    <p style="margin-top: 10px; color: #666;">* 상위 50개만 표시됩니다.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <h3 style="margin-top: 40px;">전체 당첨 티켓</h3>
+    {% if all_winning_tickets %}
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <thead>
+                <tr style="background: #667eea; color: white;">
+                    <th style="padding: 12px; text-align: left;">등급</th>
+                    <th style="padding: 12px; text-align: left;">티켓 번호</th>
+                    <th style="padding: 12px; text-align: left;">사용자</th>
+                    <th style="padding: 12px; text-align: left;">번호</th>
+                    <th style="padding: 12px; text-align: left;">구매일시</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in all_winning_tickets %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 12px;">
+                        <span class="grade-{{ ticket.winning_grade }}">{{ ticket.get_winning_grade_display }}</span>
+                    </td>
+                    <td style="padding: 12px;">#{{ ticket.id }}</td>
+                    <td style="padding: 12px;">{{ ticket.user.username }}</td>
+                    <td style="padding: 12px;">{{ ticket.numbers }}</td>
+                    <td style="padding: 12px;">{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>당첨자가 없습니다.</p>
+    {% endif %}
+
+{% else %}
+    <div style="background: #d1ecf1; padding: 30px; border-radius: 5px; margin: 20px 0; text-align: center;">
+        <p style="font-size: 1.2em; color: #0c5460;">아직 추첨이 진행되지 않았습니다.</p>
+        <a href="{% url 'admin_draw' %}" class="btn" style="margin-top: 20px;">추첨 진행하기</a>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 템플릿 필터를 위한 스타일 */
+</style>
+{% endblock %}
+

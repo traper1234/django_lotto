@@ -1,0 +1,51 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}회원가입 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>회원가입</h2>
+
+<form method="post" style="max-width: 500px; margin: 20px 0;">
+    {% csrf_token %}
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.username.errors }}</div>
+        {% endif %}
+        <small style="color: #666; display: block; margin-top: 5px;">150자 이하, 영문, 숫자 및 @/./+/-/_ 만 사용 가능</small>
+    </div>
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.password1.label }}</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.password1.errors }}</div>
+        {% endif %}
+        <small style="color: #666; display: block; margin-top: 5px;">다른 개인 정보와 유사하면 안 되며, 최소 8자 이상이어야 합니다.</small>
+    </div>
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.password2.label }}</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.password2.errors }}</div>
+        {% endif %}
+        <small style="color: #666; display: block; margin-top: 5px;">확인을 위해 비밀번호를 다시 입력하세요.</small>
+    </div>
+    
+    {% if form.non_field_errors %}
+        <div style="color: red; margin: 15px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">회원가입</button>
+</form>
+
+<div style="margin-top: 30px; text-align: center;">
+    <p>이미 계정이 있으신가요? <a href="{% url 'login' %}" style="color: #667eea; font-weight: bold;">로그인하기</a></p>
+</div>
+{% endblock %}
+

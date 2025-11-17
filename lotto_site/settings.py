@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'lotto_site.urls'
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/lotto/login/'
 LOGIN_REDIRECT_URL = '/lotto/buy/'
 
 TEMPLATES = [

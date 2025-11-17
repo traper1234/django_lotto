@@ -1,0 +1,43 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}로그인 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>로그인</h2>
+
+<form method="post" style="max-width: 500px; margin: 20px 0;">
+    {% csrf_token %}
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.username.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div style="margin: 15px 0;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.password.label }}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+            <div style="color: red; margin-top: 5px;">{{ form.password.errors }}</div>
+        {% endif %}
+    </div>
+    
+    {% if form.non_field_errors %}
+        <div style="color: red; margin: 15px 0;">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">로그인</button>
+</form>
+
+<div style="margin-top: 30px; text-align: center;">
+    <p>계정이 없으신가요? <a href="{% url 'signup' %}" style="color: #667eea; font-weight: bold;">회원가입하기</a></p>
+    <p style="margin-top: 10px;">
+        <a href="/admin/login/" style="color: #666;">관리자 로그인</a>
+    </p>
+</div>
+{% endblock %}
+

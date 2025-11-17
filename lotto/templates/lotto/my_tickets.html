@@ -1,0 +1,53 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}내 티켓 - 로또 사이트{% endblock %}
+
+{% block content %}
+<h2>내 티켓 목록</h2>
+
+{% if active_draw %}
+    <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p><strong>현재 활성 추첨:</strong> {{ active_draw.numbers }} (보너스: {{ active_draw.bonus_number }})</p>
+        <p><small>추첨일시: {{ active_draw.drawn_at|date:"Y-m-d H:i" }}</small></p>
+    </div>
+{% endif %}
+
+{% if tickets %}
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+            <tr style="background: #667eea; color: white;">
+                <th style="padding: 12px; text-align: left;">티켓 번호</th>
+                <th style="padding: 12px; text-align: left;">번호</th>
+                <th style="padding: 12px; text-align: left;">구매 방식</th>
+                <th style="padding: 12px; text-align: left;">구매일시</th>
+                <th style="padding: 12px; text-align: left;">당첨 등급</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px;">#{{ ticket.id }}</td>
+                <td style="padding: 12px;">{{ ticket.numbers }}</td>
+                <td style="padding: 12px;">{{ ticket.is_auto|yesno:"자동,수동" }}</td>
+                <td style="padding: 12px;">{{ ticket.created_at|date:"Y-m-d H:i" }}</td>
+                <td style="padding: 12px;">
+                    {% if ticket.winning_grade > 0 %}
+                        <span class="grade-{{ ticket.winning_grade }}">{{ ticket.get_winning_grade_display }}</span>
+                    {% else %}
+                        <span style="color: #999;">낙첨</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p style="margin-top: 20px;"><strong>총 {{ tickets|length }}장의 티켓</strong></p>
+{% else %}
+    <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 5px; margin: 20px 0;">
+        <p style="font-size: 1.2em; color: #666;">아직 구매한 티켓이 없습니다.</p>
+        <a href="{% url 'buy_ticket' %}" class="btn" style="margin-top: 20px;">티켓 구매하기</a>
+    </div>
+{% endif %}
+{% endblock %}
+

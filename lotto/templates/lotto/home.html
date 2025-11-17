@@ -1,0 +1,33 @@
+{% extends "lotto/base.html" %}
+
+{% block title %}홈 - 로또 사이트{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 60px 20px;">
+    <h1 style="font-size: 3em; margin-bottom: 30px; color: #667eea;">🎰 로또 사이트에 오신 것을 환영합니다!</h1>
+    
+    <p style="font-size: 1.3em; color: #666; margin-bottom: 50px;">
+        행운의 번호를 선택하고 당첨의 기쁨을 만나보세요!
+    </p>
+    
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <a href="{% url 'login' %}" class="btn" style="font-size: 1.2em; padding: 15px 40px;">
+            로그인
+        </a>
+        <a href="{% url 'signup' %}" class="btn" style="font-size: 1.2em; padding: 15px 40px; background: #28a745;">
+            회원가입
+        </a>
+    </div>
+    
+    <div style="margin-top: 60px; padding: 30px; background: #f8f9fa; border-radius: 10px; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: #667eea; margin-bottom: 20px;">주요 기능</h3>
+        <ul style="text-align: left; line-height: 2; color: #666;">
+            <li>✨ 자동/수동 로또 번호 선택</li>
+            <li>🎯 실시간 당첨 확인</li>
+            <li>📊 내 티켓 관리</li>
+            <li>🏆 등급별 당첨 통계</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
